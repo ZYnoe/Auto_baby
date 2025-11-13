@@ -3,11 +3,11 @@ import time
 from pathlib import Path
 
 
-class Experiment():
+class Experiment:
 
-    def __init__(self) -> None:
-
-        self.base_dir = Path("/home/student/zylu/demo")
+    def __init__(self, material_dir: str = "") -> None:
+        if not material_dir: raise ValueError("material_dir must be provided.")
+        self.base_dir = Path(material_dir)
         self.scf_dir = self.base_dir / "1_scf"
         self.dos_dir = self.base_dir / "2_dos"
         self.band_dir = self.base_dir / "3_bs"
@@ -24,8 +24,8 @@ class Experiment():
         """Check each calculation directory contains its required input files."""
         required_files_by_dir = {
             self.scf_dir: ("POSCAR", "POTCAR", "INCAR", "job.sh"),
-            self.dos_dir: (),
-            self.band_dir: (),
+            self.dos_dir: ("INCAR","job.sh"),
+            self.band_dir: ("INCAR","job.sh"),
         }
         missing_by_dir = {}
 
@@ -105,8 +105,3 @@ class Experiment():
 
 
 
-def run_scf_for_FIREWORKS(interval=1):
-    expt = Experiment()  # Instantiate the Experiment class
-    expt.ensure_directories()
-    expt.ensure_required_files()
-    expt.scf_calculation(interval=interval)
