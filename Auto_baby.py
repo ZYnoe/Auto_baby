@@ -117,16 +117,18 @@ class Experiment:
         # plotter.add_dos('Si(s)', pdos_Si[OrbitalType.s])
         # plotter.add_dos('Si(p)', pdos_Si[OrbitalType.p])
         plotter.get_plot(xlim=(-13, 15), ylim=(0, 3))
-        return plotter
+        plotter.save_plot(f"{material_path}/dos.png")
     
     def plot_band_structure(self, material_path: str = ''):
         if not material_path:
             raise ValueError("material_path must be provided.")
         vaspout = Vasprun(f"{material_path}/3_bs/vasprun.xml")
         band_str = vaspout.get_band_structure(line_mode=True)
-        plt = BSPlotter(band_str).get_plot(ylim=[-12,10])
-
-        return plt
+        plt = BSPlotter(band_str)
+        plt.get_plot(ylim=[-12,10])
+        plt.save_plot(f"{material_path}/band_structure.png")
+        
+        
 
 
 def scf_ready(material: str):
